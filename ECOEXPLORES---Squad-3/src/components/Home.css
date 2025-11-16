@@ -1,0 +1,142 @@
+.container {
+  min-height: 100vh;
+  width: 100vw;
+  background-image: radial-gradient(circle, #55B1E6CC, #3521a310), url(./imagemFundo.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #6b5faf1a;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  max-width: 220px;
+  height: auto;
+  z-index: 500;
+}
+
+.avatar {
+  position: absolute;
+  top: 170px;
+  left: 52px;
+  z-index: 500;
+}
+
+.avatar-image {
+  width: 90px;
+  height: 90px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #88b9ff, #7aa6f8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.ODS {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 48vw;
+  width: auto;
+  height: auto;
+  z-index: 300;
+  pointer-events: none;
+}
+
+.esLogo {
+  position: absolute;
+  bottom: 0;
+  right: -2%;
+  max-width: 42vw;
+  width: auto;
+  height: auto;
+  z-index: 200;
+  pointer-events: none;
+}
+
+.menu {
+  position: absolute;
+  top: 42%;
+  right: 38px;
+  width: 90px;
+  height: auto;
+  z-index: 600;
+}
+
+.topIcons {
+  position: absolute;
+  top: 22px;
+  right: 36px;
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  z-index: 800;
+  color: white;
+}
+
+.topIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.returnButton {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  background: rgba(0,0,0,0.38);
+  color: #fff;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.returnButton:hover {
+  transform: translateY(-2px);
+  background: rgba(0,0,0,0.55);
+}
+
+.returnButton:active {
+  transform: translateY(0);
+}
+
+.returnIcon {
+  font-size: 18px;
+}
+
+@media (max-width: 1200px) {
+  .logo { max-width: 160px; top: 16px; left: 16px; }
+  .avatar { top: 130px; left: 40px; }
+  .ODS { max-width: 60vw; }
+  .esLogo { max-width: 55vw; right: -6%; }
+  .menu { right: 20px; top: 40%; }
+  .topIcons { right: 20px; gap: 18px; }
+}
+
+@media (max-width: 768px) {
+  .logo { max-width: 120px; top: 12px; left: 12px; }
+  .avatar { display: none; }
+  .ODS { max-width: 82vw; top: 50%; }
+  .esLogo { display: none; }
+  .menu { display: none; }
+  .topIcons { display: none; }
+  .returnButton { top: 12px; left: 12px; padding: 8px 10px; font-size: 14px; }
+}

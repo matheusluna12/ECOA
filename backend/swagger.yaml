@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+  title: API - Projeto (Documentação gerada automaticamente)
+  description: Documentação gerada a partir das rotas presentes em app.js (inferido). Ajuste conforme necessário.
+  version: "1.0.0"
+servers:
+  - url: http://localhost:4000
+    description: Servidor local
+
+paths:
+  /:
+    get:
+      summary: Página raiz (HTML)
+      description: Página informativa simples (servida pelo Express).
+      responses:
+        "200":
+          description: HTML com status do servidor
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /health:
+    get:
+      summary: Health check
+      description: Retorna status do servidor.
+      responses:
+        "200":
+          description: Servidor saudável
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /register:
+    post:
+      summary: Registrar novo usuário
+      description: Cria um usuário com nome e e-mail (exemplo inferido).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+            examples:
+              exemplo:
+                value:
+                  name: "João da Silva"
+                  email: "joao@example.com"
+                  password: "senha123"
+      responses:
+        "201":
+          description: Usuário criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+
+  /auth/login:
+    post:
+      summary: Login (autenticação)
+      description: Faz login e retorna token JWT (assumido).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+            examples:
+              exemplo:
+                value:
+                  email: "joao@example.com"
+                  password: "senha123"
+      responses:
+        "200":
+          description: Autenticado com token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/logout:
+    post:
+      summary: Logout
+      description: Finaliza sessão / invalida token (comportamento depende da implementação).
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Logout bem-sucedido (sem conteúdo)
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/me:
+    get:
+      summary: Perfil do usuário autenticado
+      description: Retorna dados do usuário a partir do token.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Dados do usuário
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "642d9f7a1c9d440000a1b2c3"
+        name:
+          type: string
+          example: "João da Silva"
+        email:
+          type: string
+          example: "joao@example.com"
+    UserCreate:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    AuthRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        expiresIn:
+          type: integer
+          example: 3600
+
+  responses:
+    Unauthorized:
+      description: Não autorizado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Unauthorized"
+    BadRequest:
+      description: Requisição inválida
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Invalid request"
