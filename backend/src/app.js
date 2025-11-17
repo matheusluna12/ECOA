@@ -1,24 +1,34 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+require('dotenv').config()
+const express = require('express')
+const cors = require('cors')
+const session = require('express-session')
+const passport = require('passport')
 
-const authRoutes = require('./routes/auth');
-const registerRoutes = require('./routes/register');
-const { errorHandler } = require('./middleware/errorHandler');
+require('./config/passport')
 
-const app = express();
-const PORT = process.env.PORT || 4000;
-const FRONTEND = process.env.FRONTEND_URL || 'http://localhost:3000';
+const authRoutes = require('./routes/auth')
+const registerRoutes = require('./routes/register')
+const { errorHandler } = require('./middleware/errorHandler')
 
-// Middlewares
-app.use(cors({ origin: FRONTEND }));
-app.use(express.json());
+const app = express()
+const PORT = process.env.PORT || 4000
+const FRONTEND = process.env.FRONTEND_URL || 'http://localhost:3000'
 
-// Rotas
-app.use('/auth', authRoutes);
-app.use('/register', registerRoutes);
+app.use(cors({ origin: FRONTEND, credentials: true }))
+app.use(express.json())
 
-// Página raiz (mensagem centralizada em HTML)
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'defaultsecret',
+  resave: false,
+  saveUninitialized: false
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use('/auth', authRoutes)
+app.use('/register', registerRoutes)
+
 app.get('/', (req, res) => {
   res.send(`
     <!doctype html>
@@ -64,16 +74,13 @@ app.get('/', (req, res) => {
         </div>
       </body>
     </html>
-  `);
-});
+  `)
+})
 
-// Health endpoint (JSON)
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.get('/health', (req, res) => res.json({ status: 'ok' }))
 
-// Error handler
-app.use(errorHandler);
+app.use(errorHandler)
 
-// Start
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  console.log(`Server running on port ${PORT}`)
+})

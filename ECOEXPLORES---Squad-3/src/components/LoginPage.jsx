@@ -1,11 +1,12 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./LoginPage.css";
-import fundo from "./fundo.jpg";
-import { FaUser, FaLock, FaGooglePlusG } from "react-icons/fa";
+import React from "react"
+import { Link, useNavigate } from "react-router-dom"
+import "./LoginPage.css"
+import fundo from "./fundo.jpg"
+import { FaUser, FaLock } from "react-icons/fa"
+import { GoogleLogin } from "@react-oauth/google"
 
 const LoginPage = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const loginContainerStyle = {
     minHeight: "93.4vh",
     width: "96.9vw",
@@ -19,7 +20,7 @@ const LoginPage = () => {
     justifyContent: "center",
     margin: "0 auto",
     padding: "30px"
-  };
+  }
 
   return (
     <div style={loginContainerStyle}>
@@ -55,13 +56,27 @@ const LoginPage = () => {
             <Link to="/pre-cadastro">
               <button className="cadastro-btn">CADASTRE-SE</button>
             </Link>
+
             <div className="social-text">Faça login com</div>
-            <FaGooglePlusG className="google-icon" />
+
+            <div className="google-button">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  fetch("http://localhost:4000/auth/google/callback_token", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ credential: credentialResponse.credential })
+                  })
+                  .then(() => navigate("/home"))
+                }}
+                onError={() => {}}
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage
